@@ -1,0 +1,66 @@
+name: Oracle Database Deploy Pipeline
+
+on:
+  workflow_call:
+    inputs:
+      DB_HOST:
+        type: string
+        required: true
+      DB_USERNAME:
+        type: string
+        required: true
+    secrets:
+      VPN_PASSWORD:
+        required: true
+      VPN_USER:
+        required: true
+      DB_PASSWORD:
+        required: true
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: read
+    container:
+      image: ghcr.io/powerdesigninc/action-oracle-db-deploy:latest
+      credentials:
+        username: ${{ github.actor }}
+        password: ${{ secrets.GITHUB_TOKEN }}
+      # Required for openconnect TUN interface creation inside the container
+      options: --cap-add=NET_ADMIN --device /dev/net/tun
+
+    steps:
+      - name: Checkout Caller Repo Code
+        uses: actions/checkout@v4
+
+      - name: Connect VPN
+        env:
+          VPN_USER: ${{ secrets.VPN_USER }}
+          VPN_PASSWORD: ${{ secrets.VPN_PASSWORD }}
+          VPN_HOST: ${{ vars.VPN_HOST }}
+        run: |
+          printf '%s\n' "$VPN_PASSWORD" | openconnect \
+            --protocol=fortinet \
+            --user="$VPN_USER" \
+            --passwd-on-stdin \
+            --background \
+            "$VPN_HOST"
+
+      - name: Verify VPN Connectivity
+        run: |
+          # openconnect --background returns before the TUN route is installed
+          sleep 5
+          ping -c 3 -W 5 docker.powerdesigninc.us
+
+      - name: Run Oracle Deployment
+        env:
+          DB_HOST: ${{ inputs.DB_HOST }}
+          DB_USERNAME: ${{ inputs.DB_USERNAME }}
+          DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
+        run: |
+          oracle-db-deploy \
+            --host "$DB_HOST" \
+            --username "$DB_USERNAME" \
+            --password "$DB_PASSWORD"

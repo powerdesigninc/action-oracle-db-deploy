@@ -22,6 +22,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
         curl \
         git \
         iproute2 \
+        iputils-ping \
         openconnect \
         openjdk-17-jre-headless \
         unzip \
