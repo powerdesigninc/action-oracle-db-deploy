@@ -12,7 +12,7 @@ on:
     secrets:
       VPN_PASSWORD:
         required: true
-      VPN_USER:
+      VPN_USERNAME:
         required: true
       DB_PASSWORD:
         required: true
@@ -37,7 +37,7 @@ jobs:
 
       - name: Connect VPN
         env:
-          VPN_USER: ${{ secrets.VPN_USERNAME }}
+          VPN_USERNAME: ${{ secrets.VPN_USERNAME }}
           VPN_PASSWORD: ${{ secrets.VPN_PASSWORD }}
           VPN_HOST: ${{ vars.VPN_HOST }}
         run: |
