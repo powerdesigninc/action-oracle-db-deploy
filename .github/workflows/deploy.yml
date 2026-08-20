@@ -44,6 +44,7 @@ jobs:
           printf '%s\n' "$VPN_PASSWORD" | openconnect \
             --protocol=fortinet \
             --user="$VPN_USER" \
+            --servercert pin-sha256:xTfEl6uMQJET4m7IV1POt76XV9KYBSwMlZKL0Zvx0h8= \
             --passwd-on-stdin \
             --background \
             "$VPN_HOST"
