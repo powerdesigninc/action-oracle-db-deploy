@@ -6,9 +6,23 @@ on:
       DB_HOST:
         type: string
         required: true
-      DB_USERNAME:
+      DB_USER:
         type: string
         required: true
+      DB_APP_ID:
+        type: string
+        required: false
+      INSTALL_PATH:
+        type: string
+        required: true
+      FLOWS:
+        type: string
+        required: false
+        default: installs
+      CONTINUE_ON_ERROR:
+        type: boolean
+        required: false
+        default: true
     secrets:
       VPN_PASSWORD:
         required: true
@@ -33,7 +47,7 @@ jobs:
 
     steps:
       - name: Checkout Caller Repo Code
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
 
       - name: Connect VPN
         env:
@@ -58,10 +72,17 @@ jobs:
       - name: Run Oracle Deployment
         env:
           DB_HOST: ${{ inputs.DB_HOST }}
-          DB_USERNAME: ${{ inputs.DB_USERNAME }}
+          DB_USER: ${{ inputs.DB_USER }}
           DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
+          DB_APP_ID: ${{ inputs.DB_APP_ID }}
+          INSTALL_PATH: ${{ inputs.INSTALL_PATH }}
+          FLOWS: ${{ inputs.FLOWS }}
         run: |
           oracle-db-deploy \
             --host "$DB_HOST" \
-            --username "$DB_USERNAME" \
-            --password "$DB_PASSWORD"
+            --user "$DB_USER" \
+            --password "$DB_PASSWORD" \
+            --app-id "$DB_APP_ID" \
+            --install-path "$INSTALL_PATH" \
+            --flows "$FLOWS" \
+            --continue-on-error=${{ inputs.CONTINUE_ON_ERROR }}
