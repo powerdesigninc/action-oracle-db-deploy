@@ -37,13 +37,13 @@ jobs:
 
       - name: Connect VPN
         env:
-          VPN_USER: ${{ secrets.VPN_USER }}
+          VPN_USER: ${{ secrets.VPN_USERNAME }}
           VPN_PASSWORD: ${{ secrets.VPN_PASSWORD }}
           VPN_HOST: ${{ vars.VPN_HOST }}
         run: |
           printf '%s\n' "$VPN_PASSWORD" | openconnect \
             --protocol=fortinet \
-            --user="$VPN_USER" \
+            --user="$VPN_USERNAME" \
             --servercert pin-sha256:xTfEl6uMQJET4m7IV1POt76XV9KYBSwMlZKL0Zvx0h8= \
             --passwd-on-stdin \
             --background \
