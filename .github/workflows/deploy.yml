@@ -67,7 +67,7 @@ jobs:
         run: |
           # openconnect --background returns before the TUN route is installed
           sleep 5
-          ping -c 3 -W 5 docker.powerdesigninc.us
+          ping -c 3 -W 5 laboradb02.powerdesigninc.us
 
       - name: Run Oracle Deployment
         env:
