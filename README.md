@@ -23,7 +23,7 @@ jobs:
     uses: powerdesigninc/action-oracle-db-deploy/.github/workflows/deploy.yml@main
     with:
       DB_HOST: ${{ vars.DB_HOST_LAB02 }}
-      DB_USER: ${{ vars.DB_USERNAME }}
+      DB_USERNAME: ${{ vars.DB_USERNAME }}
       DB_APP_ID: ${{ vars.DB_APP_ID }}
       INSTALL_PATH: ./00_installs/dev
       FLOWS: installs
@@ -40,7 +40,7 @@ jobs:
 | Input | Required | Description |
 | --- | --- | --- |
 | `DB_HOST` | yes | EZConnect string, e.g. `db.example.com:1521/ORCL` |
-| `DB_USER` | yes | Database user / schema |
+| `DB_USERNAME` | yes | Database user / schema |
 | `INSTALL_PATH` | yes | Folder holding the install `.sql` files |
 | `DB_APP_ID` | only when files are uploaded | APEX application id that receives the static files |
 | `FLOWS` | no, default `installs` | Comma separated: `installs`, `files2` |
@@ -52,7 +52,7 @@ jobs:
 | --- | --- |
 | `VPN_USERNAME` | FortiGate VPN user |
 | `VPN_PASSWORD` | FortiGate VPN password |
-| `DB_PASSWORD` | Database password for `DB_USER` |
+| `DB_PASSWORD` | Database password for `DB_USERNAME` |
 
 `vars.VPN_HOST` must be set in the calling repo (or its org/environment) — the
 workflow reads it directly rather than taking it as an input.

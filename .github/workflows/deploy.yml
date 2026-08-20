@@ -6,7 +6,7 @@ on:
       DB_HOST:
         type: string
         required: true
-      DB_USER:
+      DB_USERNAME:
         type: string
         required: true
       DB_APP_ID:
@@ -72,7 +72,7 @@ jobs:
       - name: Run Oracle Deployment
         env:
           DB_HOST: ${{ inputs.DB_HOST }}
-          DB_USER: ${{ inputs.DB_USER }}
+          DB_USERNAME: ${{ inputs.DB_USERNAME }}
           DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
           DB_APP_ID: ${{ inputs.DB_APP_ID }}
           INSTALL_PATH: ${{ inputs.INSTALL_PATH }}
@@ -80,7 +80,7 @@ jobs:
         run: |
           oracle-db-deploy \
             --host "$DB_HOST" \
-            --user "$DB_USER" \
+            --user "$DB_USERNAME" \
             --password "$DB_PASSWORD" \
             --app-id "$DB_APP_ID" \
             --install-path "$INSTALL_PATH" \
